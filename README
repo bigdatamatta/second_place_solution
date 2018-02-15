@@ -1,0 +1,90 @@
+# fMoW: Functional Map of the World
+
+This code was developed by Jianmin Sun.
+
+## Dependencies
+
+The following libraries were used for training/testing the deep learning models:
+
+Mxnet 0.11.0
+
+Keras 2.0.8
+
+Tensorflow 1.3.0
+
+fMoW/baseline from(https://github.com/fMoW/baseline)
+
+## Dataset
+
+The following directory structure was used for training/testing:
+
+
+```
+
+fmow_dataset/
+    train/
+        airport/
+            airport_0/
+                airport_0_0_rgb.jpg
+                airport_0_0_rgb.json
+                ...
+                airport_0_5_rgb.jpg
+                airport_0_5_rgb.json
+            ...
+        ...
+
+        zoo/
+            zoo_0/
+                zoo_0_0_rgb.jpg
+                zoo_0_0_rgb.json
+                ...
+                zoo_0_8_rgb.jpg
+                zoo_0_8_rgb.json
+
+                ...
+
+    test/
+        0000000/
+            0000000_0_rgb.jpg
+            0000000_0_rgb.json
+            ...
+            0000000_5_rgb.jpg
+            0000000_5_rgb.json
+        ...
+```
+
+## Results Format
+
+This code will output txt files in the format required by Topcoder, where each line contains comma-separated values of the bounding box ID and a string containing the category.
+
+## Running the Code
+
+To first prepare the dataset for training and testing, prepare the RGB-only version of the dataset in ./data:
+
+```
+docker build -t fmow .
+nvidia-docker run -v ./data/:/data -it fmow
+
+```
+for training (whole processes will take over 100 hours on g3.16xlarge)
+baseline each epoch takes about 7 hours, total 6x7 hours needed
+three mxnet models with eight epoch and one with six epoch
+mxnet model each epoch takes about 2.2 hours, total 2.2x8x4 hours needed
+bash train.sh /data/train
+bash test.sh /data/train /data/test /work/out.txt model
+
+Our best performing model is the CNN with meta data approach, which sums predictions over each temporal view and then takes an argmax.
+
+
+## License
+
+The license is Apache 2.0. See LICENSE.
+
+
+
+
+
+
+
+
+
